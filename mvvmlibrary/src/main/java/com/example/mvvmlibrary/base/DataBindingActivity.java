@@ -6,7 +6,6 @@ import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -71,9 +70,14 @@ public abstract class DataBindingActivity<B extends ViewDataBinding> extends App
         View container = getLayoutInflater().inflate(R.layout.activity_base, null, false);
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) container.findViewById(R.id.swipeBackLayout);
         swipeBackLayout.setDragEdge(SwipeBackLayout.DragEdge.LEFT);
-        View ivShadow = container.findViewById(R.id.iv_shadow);
+        final View ivShadow = container.findViewById(R.id.iv_shadow);
         swipeBackLayout.addView(rootView);
-        swipeBackLayout.setOnSwipeBackListener((fa, fs) -> ivShadow.setAlpha(1 - fs));
+        swipeBackLayout.setOnSwipeBackListener(new SwipeBackLayout.SwipeBackListener() {
+            @Override
+            public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
+                ivShadow.setAlpha(1 - fractionScreen);
+            }
+        });
         return container;
     }
 

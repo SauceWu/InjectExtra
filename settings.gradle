@@ -1,1 +1,1 @@
-include ':app', ':mvvmlibrary'
+include ':app', ':mvvmlibrary', ':annotation', ':apt', ':bindextra'

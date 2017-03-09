@@ -1,1 +1,2 @@
-include ':app', ':mvvmlibrary', ':annotation', ':apt', ':bindextra'
+rootProject.name = 'sauceLib'
+include ':sample:app', ':widgetLibrary', ':injectExtra-annotation', ':injectExtra-compiler', ':injectExtra'

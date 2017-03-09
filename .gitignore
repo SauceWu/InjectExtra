@@ -35,4 +35,5 @@ proguard/
 *.iws
 .idea/
 
-
+libs/
+proguard-rules.pro

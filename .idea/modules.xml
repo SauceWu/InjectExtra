@@ -2,12 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SMVP.iml" filepath="$PROJECT_DIR$/SMVP.iml" />
-      <module fileurl="file://$PROJECT_DIR$/annotation/annotation.iml" filepath="$PROJECT_DIR$/annotation/annotation.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/apt/apt.iml" filepath="$PROJECT_DIR$/apt/apt.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bindextra/bindextra.iml" filepath="$PROJECT_DIR$/bindextra/bindextra.iml" />
-      <module fileurl="file://$PROJECT_DIR$/mvvmlibrary/mvvmlibrary.iml" filepath="$PROJECT_DIR$/mvvmlibrary/mvvmlibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sample/app/app.iml" filepath="$PROJECT_DIR$/sample/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/injectExtra/injectExtra.iml" filepath="$PROJECT_DIR$/injectExtra/injectExtra.iml" />
+      <module fileurl="file://$PROJECT_DIR$/injectExtra-annotation/injectExtra-annotation.iml" filepath="$PROJECT_DIR$/injectExtra-annotation/injectExtra-annotation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/injectExtra-compiler/injectExtra-compiler.iml" filepath="$PROJECT_DIR$/injectExtra-compiler/injectExtra-compiler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sauceLib.iml" filepath="$PROJECT_DIR$/sauceLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/widgetLibrary/widgetLibrary.iml" filepath="$PROJECT_DIR$/widgetLibrary/widgetLibrary.iml" />
     </modules>
   </component>
 </project>

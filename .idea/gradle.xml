@@ -8,11 +8,12 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/annotation" />
-            <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/apt" />
-            <option value="$PROJECT_DIR$/bindextra" />
-            <option value="$PROJECT_DIR$/mvvmlibrary" />
+            <option value="$PROJECT_DIR$/injectExtra" />
+            <option value="$PROJECT_DIR$/injectExtra-annotation" />
+            <option value="$PROJECT_DIR$/injectExtra-compiler" />
+            <option value="$PROJECT_DIR$/sample" />
+            <option value="$PROJECT_DIR$/sample/app" />
+            <option value="$PROJECT_DIR$/widgetLibrary" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

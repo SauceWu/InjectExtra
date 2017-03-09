@@ -37,3 +37,6 @@ proguard/
 
 libs/
 proguard-rules.pro
+src/androidTest/java/me/
+src/main/java/me/
+src/test/java/me/

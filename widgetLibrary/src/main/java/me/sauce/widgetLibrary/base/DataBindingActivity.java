@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.sauce.widgetLibrary.R;
+
 import me.sauce.widgetLibrary.utils.MPermissionUtils;
 import me.sauce.widgetLibrary.view.widget.SwipeBackLayout;
 
@@ -46,7 +48,7 @@ public abstract class DataBindingActivity<B extends ViewDataBinding> extends App
     }
 
     private void initToolBar() {
-        toolbar = (Toolbar) findViewById(me.example.mvvmlibrary.R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -55,7 +57,7 @@ public abstract class DataBindingActivity<B extends ViewDataBinding> extends App
 
     public void reload() {
 //        AppCompatDelegate.setDefaultNightMode(SpUtil.isNight() ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-        getWindow().setWindowAnimations(me.example.mvvmlibrary.R.style.WindowAnimationFadeInOut);
+        getWindow().setWindowAnimations(R.style.WindowAnimationFadeInOut);
         recreate();
     }
 
@@ -65,11 +67,11 @@ public abstract class DataBindingActivity<B extends ViewDataBinding> extends App
     }
 
     private View getContainer(View rootView) {
-        rootView.setBackgroundColor(getResources().getColor(me.example.mvvmlibrary.R.color.alpha_white));
-        View container = getLayoutInflater().inflate(me.example.mvvmlibrary.R.layout.activity_base, null, false);
-        SwipeBackLayout swipeBackLayout = (SwipeBackLayout) container.findViewById(me.example.mvvmlibrary.R.id.swipeBackLayout);
+        rootView.setBackgroundColor(getResources().getColor(R.color.alpha_white));
+        View container = getLayoutInflater().inflate(R.layout.activity_base, null, false);
+        SwipeBackLayout swipeBackLayout = (SwipeBackLayout) container.findViewById(R.id.swipeBackLayout);
         swipeBackLayout.setDragEdge(SwipeBackLayout.DragEdge.LEFT);
-        final View ivShadow = container.findViewById(me.example.mvvmlibrary.R.id.iv_shadow);
+        final View ivShadow = container.findViewById(R.id.iv_shadow);
         swipeBackLayout.addView(rootView);
         swipeBackLayout.setOnSwipeBackListener(new SwipeBackLayout.SwipeBackListener() {
             @Override

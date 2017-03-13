@@ -10,8 +10,9 @@ public class BindExtraField {
 
     private VariableElement mFieldElement;
     private String mKey;
+    private String defaultValue;
 
-    public BindExtraField(Element element) throws IllegalArgumentException {
+    BindExtraField(Element element) throws IllegalArgumentException {
         if (element.getKind() != ElementKind.FIELD) {
             throw new IllegalArgumentException(
                     String.format("Only fields can be annotated with @%s", InjectExtra.class.getSimpleName()));
@@ -19,18 +20,19 @@ public class BindExtraField {
 
         mFieldElement = (VariableElement) element;
         InjectExtra bindView = mFieldElement.getAnnotation(InjectExtra.class);
-        mKey = bindView.value();
+        mKey = bindView.key();
+        defaultValue = bindView.defaultValue();
     }
 
-    public String getKey() {
+    String getKey() {
         return mKey;
     }
 
-    public TypeMirror getFieldType() {
+    TypeMirror getFieldType() {
         return mFieldElement.asType();
     }
 
-    public Name getFieldName() {
+    Name getFieldName() {
         return mFieldElement.getSimpleName();
     }
 }

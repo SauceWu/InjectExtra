@@ -6,17 +6,18 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import me.sauce.InjectExtra;
+import com.example.sauce.databinding.R;
 
+import me.sauce.InjectExtra;
 import me.sauce.injectExtra.BindExtra;
 
 public class Main2Activity extends AppCompatActivity {
-    @InjectExtra("data")
-    String data;
+    @InjectExtra(key = "data")
+    int data;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, Main2Activity.class);
-        starter.putExtra("data", "成功传过来了");
+//        starter.putExtra("data", "hello world");
         context.startActivity(starter);
     }
 
@@ -25,11 +26,8 @@ public class Main2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         BindExtra.inject(this);
         setContentView(R.layout.activity_main2);
-        String s = (String) getIntent().getExtras().get("data");
-
-        String xxxx = getIntent().getStringExtra(data);
         TextView textView = (TextView) findViewById(R.id.text);
-        textView.setText(data);
+        textView.setText(String.valueOf(data));
 
 
     }

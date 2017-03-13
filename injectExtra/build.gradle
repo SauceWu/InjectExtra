@@ -11,6 +11,7 @@ group = "me.sauce"
 
 dependencies {
     compile project(':injectExtra-annotation')
+    compile "com.android.support:support-v4:25.2.0"
 }
 
 

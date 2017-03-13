@@ -20,6 +20,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
+import javax.tools.Diagnostic;
 
 
 @AutoService(Processor.class)//自动生成 javax.annotation.processing.IProcessor 文件
@@ -70,7 +71,7 @@ public class AnnotationProcessor extends AbstractProcessor {
             try {
                 annotatedClass.generateFinder().writeTo(mFiler);
             } catch (IOException e) {
-                return true;
+                processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Unable to write binding for type %s: %s" + e.getMessage());
             }
         }
         return true;
@@ -84,6 +85,7 @@ public class AnnotationProcessor extends AbstractProcessor {
             annotatedClass.addField(field);
         }
     }
+
     private ExtraAnnotationProcessor getAnnotatedClass(Element element) {
         TypeElement classElement = (TypeElement) element.getEnclosingElement();
         String fullClassName = classElement.getQualifiedName().toString();

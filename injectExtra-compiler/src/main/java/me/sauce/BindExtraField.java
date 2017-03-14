@@ -19,7 +19,7 @@ public class BindExtraField {
 
         mFieldElement = (VariableElement) element;
         InjectExtra bindView = mFieldElement.getAnnotation(InjectExtra.class);
-        mKey = bindView.key();
+        mKey = bindView.value();
     }
 
     String getKey() {

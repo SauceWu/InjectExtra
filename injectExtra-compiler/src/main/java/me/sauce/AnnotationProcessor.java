@@ -79,7 +79,6 @@ public class AnnotationProcessor extends AbstractProcessor {
 
     private void processBindExtra(RoundEnvironment roundEnv) throws IllegalArgumentException {
         for (Element element : roundEnv.getElementsAnnotatedWith(InjectExtra.class)) {
-            // TODO: 16/8/4 检查 字段 的修饰符
             ExtraAnnotationProcessor annotatedClass = getAnnotatedClass(element);
             BindExtraField field = new BindExtraField(element);
             annotatedClass.addField(field);

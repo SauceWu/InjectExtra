@@ -46,18 +46,20 @@ public class ExtraAnnotationProcessor {
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(UI_THREAD)
                 .addParameter(TypeName.get(typeMirror), "target");
-        if (isSubtypeOfType(typeMirror, "android.app.Activity")) {
-            for (BindExtraField field : mFields) {
-                // find views
-                injectMethodBuilder.addStatement("$N = (target.getIntent().getExtras().get($S))", field.getFieldName(), ClassName.get(field.getFieldType()), field.getKey());
-            }
-        } else {
-            for (BindExtraField field : mFields) {
-                // find views
-                injectMethodBuilder.addStatement("target.$N = ($T)(target.getArguments().get($S))", field.getFieldName(),
-                        ClassName.get(field.getFieldType()), field.getKey());
-            }
+
+
+        for (BindExtraField field : mFields) {
+            // find views
+            if (isSubtypeOfType(typeMirror, "android.app.Activity"))
+                injectMethodBuilder.addStatement("Object $N = target.getIntent().getExtras().get($S)", field.getFieldName(), field.getKey());
+            else
+                injectMethodBuilder.addStatement("Object $N = target.getArguments().get($S)", field.getFieldName(), field.getKey());
+
+            injectMethodBuilder.addStatement("if($N!=null)\ntarget.$N = ($T)$N", field.getFieldName(), field.getFieldName(), ClassName.get(field.getFieldType()), field.getFieldName());
+
         }
+
+
         // generate whole class
         TypeSpec finderClass = TypeSpec.classBuilder(mClassElement.getSimpleName() + "_ExtraBinding")
                 .addModifiers(Modifier.PUBLIC)

@@ -10,7 +10,4 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
 @Target(FIELD)
 public @interface InjectExtra {
     String key();
-
-    String defaultValue() default "";
-
 }

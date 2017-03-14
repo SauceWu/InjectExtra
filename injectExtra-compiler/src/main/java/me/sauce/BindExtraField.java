@@ -10,7 +10,6 @@ public class BindExtraField {
 
     private VariableElement mFieldElement;
     private String mKey;
-    private String defaultValue;
 
     BindExtraField(Element element) throws IllegalArgumentException {
         if (element.getKind() != ElementKind.FIELD) {
@@ -21,7 +20,6 @@ public class BindExtraField {
         mFieldElement = (VariableElement) element;
         InjectExtra bindView = mFieldElement.getAnnotation(InjectExtra.class);
         mKey = bindView.key();
-        defaultValue = bindView.defaultValue();
     }
 
     String getKey() {

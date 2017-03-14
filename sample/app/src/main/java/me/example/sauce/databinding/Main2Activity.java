@@ -11,13 +11,16 @@ import com.example.sauce.databinding.R;
 import me.sauce.InjectExtra;
 import me.sauce.injectExtra.BindExtra;
 
+
 public class Main2Activity extends AppCompatActivity {
-    @InjectExtra(key = "data")
-    int data;
+    @InjectExtra("data")
+    String data;
+    @InjectExtra("math")
+    int math = 1;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, Main2Activity.class);
-//        starter.putExtra("data", "hello world");
+        starter.putExtra("data", "hello world");
         context.startActivity(starter);
     }
 
@@ -27,7 +30,8 @@ public class Main2Activity extends AppCompatActivity {
         BindExtra.inject(this);
         setContentView(R.layout.activity_main2);
         TextView textView = (TextView) findViewById(R.id.text);
-        textView.setText(String.valueOf(data));
+
+        textView.setText(data + "----" + math);
 
 
     }

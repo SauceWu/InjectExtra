@@ -1,7 +1,7 @@
-#SauceLib 
-本意为尝试各种新鲜的技术 提高自身技术水平 生命不息 学习不止
-##injectExtra 
-使用注解提取Extra 
+#injectExtra 
+
+ * Eliminate `getIntent()` or `getArguments()`calls by using `@InjectExtra` on fields.
+
 ```java
 public class ExampleActivity extends AppCompatActivity {
     @InjectExtra("data")

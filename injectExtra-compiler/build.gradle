@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "0.2.1" // 修改为你的版本号
+version = "0.2.2" // 修改为你的版本号
 def siteUrl = 'https://github.com/unknownSauce/sauceLib' // 修改为你的项目的主页
 def gitUrl = 'https://github.com/unknownSauce/sauceLib.git' // 修改为你的Git仓库的url
 group = "me.sauce"
@@ -15,7 +15,7 @@ targetCompatibility = JavaVersion.VERSION_1_8
 dependencies {
     compile project(':injectExtra-annotation')
     compile 'com.google.auto.service:auto-service:1.0-rc2'
-    compile 'com.squareup:javapoet:1.4.0'
+    compile 'com.squareup:javapoet:1.8.0'
 }
 
 //  解决build警告：编码GBK的不可映射字符

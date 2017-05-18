@@ -3,14 +3,17 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="$USER_HOME$/Library/Android/sdk/gradle-4.0-milestone-1" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/injectExtra" />
             <option value="$PROJECT_DIR$/injectExtra-annotation" />
             <option value="$PROJECT_DIR$/injectExtra-compiler" />
+            <option value="$PROJECT_DIR$/rxBus" />
+            <option value="$PROJECT_DIR$/rxBus-annotation" />
             <option value="$PROJECT_DIR$/sample" />
             <option value="$PROJECT_DIR$/sample/app" />
             <option value="$PROJECT_DIR$/widgetLibrary" />

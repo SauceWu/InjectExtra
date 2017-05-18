@@ -4,29 +4,34 @@ apply plugin: 'com.jfrog.bintray'
 
 
 
-version = "0.2.1" // 修改为你的版本号
+version = "0.2.2" // 修改为你的版本号
 def siteUrl = 'https://github.com/unknownSauce/sauceLib' // 修改为你的项目的主页
 def gitUrl = 'https://github.com/unknownSauce/sauceLib.git' // 修改为你的Git仓库的url
 group = "me.sauce"
 
 dependencies {
     compile project(':injectExtra-annotation')
-    compile "com.android.support:support-v4:25.2.0"
+    compile deps.supportv4
 }
 
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode Integer.parseInt(rootProject.ext.VERSION_CODE)
+        versionName rootProject.ext.VERSION_NAME
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+
+    }
+    compileOptions {
+        sourceCompatibility rootProject.ext.sourceCompatibilityVersion
+        targetCompatibility rootProject.ext.targetCompatibilityVersion
     }
     buildTypes {
         release {

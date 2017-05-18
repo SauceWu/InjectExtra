@@ -35,9 +35,10 @@ public class AnnotationProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        Set<String> annotataions = new LinkedHashSet<String>();
-        annotataions.add(InjectExtra.class.getCanonicalName());
-        return annotataions;
+        Set<String> annotationsTypes = new LinkedHashSet<>();
+        annotationsTypes.add(InjectExtra.class.getCanonicalName());
+        annotationsTypes.add(APIService.class.getCanonicalName());
+        return annotationsTypes;
     }
 
     @Override
@@ -55,19 +56,27 @@ public class AnnotationProcessor extends AbstractProcessor {
         mMessager = processingEnv.getMessager();
     }
 
-    private Map<String, ExtraAnnotationProcessor> mAnnotatedClassMap = new HashMap<>();
+    private Map<String, ExtraAnnotationProcessor> mExtraAnnotatedClassMap = new HashMap<>();
+    private Map<String, ApiServiceAnnotatedProcessor> mApiAnnotatedClassMap = new HashMap<>();
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        mAnnotatedClassMap.clear();
+        mExtraAnnotatedClassMap.clear();
 
         try {
             processBindExtra(roundEnv);
+            processApiService(roundEnv);
         } catch (IllegalArgumentException e) {
             return true; // stop process
         }
-
-        for (ExtraAnnotationProcessor annotatedClass : mAnnotatedClassMap.values()) {
+        for (ApiServiceAnnotatedProcessor annotatedClass : mApiAnnotatedClassMap.values()) {
+            try {
+                annotatedClass.generateFinder().writeTo(mFiler);
+            } catch (IOException e) {
+                processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Unable to write binding for type %s: %s" + e.getMessage());
+            }
+        }
+        for (ExtraAnnotationProcessor annotatedClass : mExtraAnnotatedClassMap.values()) {
             try {
                 annotatedClass.generateFinder().writeTo(mFiler);
             } catch (IOException e) {
@@ -77,23 +86,44 @@ public class AnnotationProcessor extends AbstractProcessor {
         return true;
     }
 
+    private void processApiService(RoundEnvironment roundEnv)  throws IllegalArgumentException{
+        for (Element element : roundEnv.getElementsAnnotatedWith(APIService.class)) {
+            ApiServiceAnnotatedProcessor annotatedClass = getApiAnnotatedClass(element);
+            ApiServiceField field = new ApiServiceField(element);
+            annotatedClass.addField(field);
+        }
+    }
+
     private void processBindExtra(RoundEnvironment roundEnv) throws IllegalArgumentException {
         for (Element element : roundEnv.getElementsAnnotatedWith(InjectExtra.class)) {
-            ExtraAnnotationProcessor annotatedClass = getAnnotatedClass(element);
+            ExtraAnnotationProcessor annotatedClass = getExtraAnnotatedClass(element);
             BindExtraField field = new BindExtraField(element);
             annotatedClass.addField(field);
         }
     }
 
-    private ExtraAnnotationProcessor getAnnotatedClass(Element element) {
+    private ExtraAnnotationProcessor getExtraAnnotatedClass(Element element) {
         TypeElement classElement = (TypeElement) element.getEnclosingElement();
         String fullClassName = classElement.getQualifiedName().toString();
-        ExtraAnnotationProcessor annotatedClass = mAnnotatedClassMap.get(fullClassName);
-        if (annotatedClass == null) {
+        ExtraAnnotationProcessor annotatedClass;
+        if (mExtraAnnotatedClassMap.containsKey(fullClassName)) {
+            annotatedClass = mExtraAnnotatedClassMap.get(fullClassName);
+        } else {
             annotatedClass = new ExtraAnnotationProcessor(classElement, mElementUtils);
-            mAnnotatedClassMap.put(fullClassName, annotatedClass);
+            mExtraAnnotatedClassMap.put(fullClassName, annotatedClass);
         }
         return annotatedClass;
     }
-
+    private ApiServiceAnnotatedProcessor getApiAnnotatedClass(Element element) {
+        TypeElement classElement = (TypeElement) element.getEnclosingElement();
+        String fullClassName = classElement.getQualifiedName().toString();
+        ApiServiceAnnotatedProcessor annotatedClass;
+        if (mApiAnnotatedClassMap.containsKey(fullClassName)) {
+            annotatedClass = mApiAnnotatedClassMap.get(fullClassName);
+        } else {
+            annotatedClass = new ApiServiceAnnotatedProcessor(classElement, mElementUtils);
+            mApiAnnotatedClassMap.put(fullClassName, annotatedClass);
+        }
+        return annotatedClass;
+    }
 }

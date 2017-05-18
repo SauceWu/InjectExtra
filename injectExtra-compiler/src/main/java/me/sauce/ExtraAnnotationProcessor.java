@@ -26,8 +26,7 @@ public class ExtraAnnotationProcessor {
     public TypeElement mClassElement;
     public List<BindExtraField> mFields;
     public Elements mElementUtils;
-    private static final ClassName UI_THREAD =
-            ClassName.get("android.support.annotation", "UiThread");
+    private static final ClassName UI_THREAD = ClassName.get("android.support.annotation", "UiThread");
 
     public ExtraAnnotationProcessor(TypeElement classElement, Elements mElementUtils) {
         this.mClassElement = classElement;
@@ -64,6 +63,7 @@ public class ExtraAnnotationProcessor {
         TypeSpec finderClass = TypeSpec.classBuilder(mClassElement.getSimpleName() + "_ExtraBinding")
                 .addModifiers(Modifier.PUBLIC)
                 .addMethod(injectMethodBuilder.build())
+                .addSuperinterface(ClassName.get("java.io", "Serializable"))
                 .build();
 
         String packageName = mElementUtils.getPackageOf(mClassElement).getQualifiedName().toString();

@@ -1,2 +1,2 @@
 rootProject.name = 'sauceLib'
-include ':sample:app', ':widgetLibrary', ':injectExtra-annotation', ':injectExtra-compiler', ':injectExtra'
+include ':sample:app', ':widgetLibrary', ':injectExtra-annotation', ':injectExtra-compiler', ':injectExtra', ':rxBus', ':rxBus-annotation'

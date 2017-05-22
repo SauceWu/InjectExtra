@@ -7,7 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 
-
 /**
  * Created by Android on 2016/6/8.
  */
@@ -15,4 +14,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface Subscribe {
     int tag() default RxBusTag.TAG_DEFAULT;
+
+    EventThread thread() default EventThread.MAIN_THREAD;
 }

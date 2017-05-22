@@ -9,12 +9,14 @@ import javax.lang.model.element.Name;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 
+import me.sauce.EventThread;
 import me.sauce.Subscribe;
 
 public class BindBusField {
 
     private ExecutableElement mFieldElement;
     private int mTag;
+    private final EventThread mThread;
 
     BindBusField(Element element) throws IllegalArgumentException {
         if (element.getKind() != ElementKind.METHOD) {
@@ -25,7 +27,7 @@ public class BindBusField {
         mFieldElement = (ExecutableElement) element;
         Subscribe bindView = mFieldElement.getAnnotation(Subscribe.class);
         mTag = bindView.tag();
-
+        mThread = bindView.thread();
     }
 
     int getTag() {
@@ -42,5 +44,9 @@ public class BindBusField {
 
     List<? extends VariableElement> getParameters() {
         return mFieldElement.getParameters();
+    }
+
+    public String getFieldThread() {
+        return EventThread.getScheduler(mThread);
     }
 }

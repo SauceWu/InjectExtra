@@ -50,6 +50,7 @@ public class BusAnnotationProcessor {
         for (BindBusField field : mFields) {
             // find views
             injectMethodBuilder.addCode("rxBus.toObservable($L)", field.getTag());
+            injectMethodBuilder.addCode(".observeOn($L)",field.getFieldThread());
             if (field.getParameters().size() == 0)
                 injectMethodBuilder.addCode(".subscribe(o ->target.$N());", field.getFieldName());
             else

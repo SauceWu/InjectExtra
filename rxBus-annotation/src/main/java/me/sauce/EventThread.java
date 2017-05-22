@@ -1,8 +1,5 @@
 package me.sauce;
 
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Android on 2016/6/8.
@@ -11,7 +8,7 @@ public enum EventThread {
     /**
      * 主线程
      */
-    MAIN_THREAD("1"),
+    MAIN_THREAD,
     /**
      * 新的线程
      */
@@ -35,22 +32,22 @@ public enum EventThread {
         String scheduler;
         switch (threadMode) {
             case MAIN_THREAD:
-                scheduler = AndroidSchedulers.mainThread();
+                scheduler = "io.reactivex.android.schedulers.AndroidSchedulers.mainThread()";
                 break;
             case NEW_THREAD:
-                scheduler = Schedulers.newThread();
+                scheduler = "io.reactivex.schedulers.Schedulers.newThread()";
                 break;
             case IO:
-                scheduler = Schedulers.io();
+                scheduler = " io.reactivex.schedulers. Schedulers.io()";
                 break;
             case COMPUTATION:
-                scheduler = Schedulers.computation();
+                scheduler = "io.reactivex.schedulers.Schedulers.computation()";
                 break;
             case TRAMPOLINE:
-                scheduler = Schedulers.trampoline();
+                scheduler = "io.reactivex.schedulers.Schedulers.trampoline()";
                 break;
             default:
-                scheduler = AndroidSchedulers.mainThread();
+                scheduler = "io.reactivex.schedulers.AndroidSchedulers.mainThread()";
         }
         return scheduler;
     }

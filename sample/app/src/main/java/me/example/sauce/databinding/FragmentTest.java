@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import com.example.sauce.databinding.R;
 
+
+import me.sauce.EventThread;
 import me.sauce.InjectExtra;
 import me.sauce.Subscribe;
 import me.sauce.rxBus.RxManager;
@@ -36,8 +38,8 @@ public class FragmentTest extends Fragment {
         view.findViewById(R.id.bt).setOnClickListener(v -> me.sauce.rxBus.RxBus.getInstance().post(200));
     }
 
-    @Subscribe(tag = 200)
-    public void Event(){
+    @Subscribe(tag = 200, thread = EventThread.IO)
+    public void Event() {
         Toast.makeText(getActivity(), "成功", Toast.LENGTH_SHORT).show();
 
     }

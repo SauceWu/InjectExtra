@@ -11,7 +11,7 @@ public enum EventThread {
     /**
      * 主线程
      */
-    MAIN_THREAD,
+    MAIN_THREAD("1"),
     /**
      * 新的线程
      */
@@ -29,15 +29,28 @@ public enum EventThread {
      */
     TRAMPOLINE;
 
-    public static Scheduler getScheduler(EventThread threadMode){
-        Scheduler scheduler;
-        switch (threadMode){
-            case MAIN_THREAD:scheduler= AndroidSchedulers.mainThread();break;
-            case NEW_THREAD:scheduler= Schedulers.newThread();break;
-            case IO:scheduler=Schedulers.io();break;
-            case COMPUTATION:scheduler=Schedulers.computation();break;
-            case TRAMPOLINE:scheduler=Schedulers.trampoline();break;
-            default:scheduler= AndroidSchedulers.mainThread();
+
+
+    public static String getScheduler(EventThread threadMode) {
+        String scheduler;
+        switch (threadMode) {
+            case MAIN_THREAD:
+                scheduler = AndroidSchedulers.mainThread();
+                break;
+            case NEW_THREAD:
+                scheduler = Schedulers.newThread();
+                break;
+            case IO:
+                scheduler = Schedulers.io();
+                break;
+            case COMPUTATION:
+                scheduler = Schedulers.computation();
+                break;
+            case TRAMPOLINE:
+                scheduler = Schedulers.trampoline();
+                break;
+            default:
+                scheduler = AndroidSchedulers.mainThread();
         }
         return scheduler;
     }

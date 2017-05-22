@@ -1,13 +1,8 @@
 apply plugin: 'java'
 
 dependencies {
-    compile deps.rx
-    compile deps.rxAndroid
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
-// 解决build警告：编码GBK的不可映射字符
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
-}

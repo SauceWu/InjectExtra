@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/injectExtra-compiler" />
             <option value="$PROJECT_DIR$/rxBus" />
             <option value="$PROJECT_DIR$/rxBus-annotation" />
+            <option value="$PROJECT_DIR$/rxBus-compiler" />
             <option value="$PROJECT_DIR$/sample" />
             <option value="$PROJECT_DIR$/sample/app" />
             <option value="$PROJECT_DIR$/widgetLibrary" />

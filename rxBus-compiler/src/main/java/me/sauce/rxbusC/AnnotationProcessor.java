@@ -1,4 +1,4 @@
-package me.sauce;
+package me.sauce.rxbusC;
 
 import com.google.auto.service.AutoService;
 
@@ -22,6 +22,7 @@ import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 
+import me.sauce.Subscribe;
 
 @AutoService(Processor.class)//自动生成 javax.annotation.processing.IProcessor 文件
 @SupportedSourceVersion(SourceVersion.RELEASE_8)//java版本支持
@@ -36,9 +37,8 @@ public class AnnotationProcessor extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> annotationsTypes = new LinkedHashSet<>();
-        mMessager.printMessage(Diagnostic.Kind.NOTE, "getSupportedAnnotationTypes");
-
-        annotationsTypes.add(InjectExtra.class.getCanonicalName());
+        mMessager.printMessage(Diagnostic.Kind.NOTE,"getSupportedAnnotationTypes");
+        annotationsTypes.add(Subscribe.class.getCanonicalName());
         return annotationsTypes;
     }
 
@@ -57,47 +57,51 @@ public class AnnotationProcessor extends AbstractProcessor {
         mMessager = processingEnv.getMessager();
     }
 
-    private Map<String, ExtraAnnotationProcessor> mExtraAnnotatedClassMap = new HashMap<>();
+    private Map<String, BusAnnotationProcessor> mBusAnnotatedClassMap = new HashMap<>();
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        mExtraAnnotatedClassMap.clear();
-        mMessager.printMessage(Diagnostic.Kind.NOTE, "process");
+        mBusAnnotatedClassMap.clear();
         try {
-            processBindExtra(roundEnv);
+            mMessager.printMessage(Diagnostic.Kind.NOTE,"process");
+
+            processBindBus(roundEnv);
         } catch (IllegalArgumentException e) {
             return true; // stop process
         }
 
-        for (ExtraAnnotationProcessor annotatedClass : mExtraAnnotatedClassMap.values()) {
+        for (BusAnnotationProcessor annotatedClass : mBusAnnotatedClassMap.values()) {
             try {
                 annotatedClass.generateFinder().writeTo(mFiler);
             } catch (IOException e) {
-                processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Unable to write binding for type %s: %s" + e.getMessage());
+                mMessager.printMessage(Diagnostic.Kind.ERROR, "Unable to write binding for type %s: %s" + e.getMessage());
             }
         }
         return true;
     }
 
 
-    private void processBindExtra(RoundEnvironment roundEnv) throws IllegalArgumentException {
-        for (Element element : roundEnv.getElementsAnnotatedWith(InjectExtra.class)) {
-            ExtraAnnotationProcessor annotatedClass = getExtraAnnotatedClass(element);
-            BindExtraField field = new BindExtraField(element);
+
+    private void processBindBus(RoundEnvironment roundEnv) throws IllegalArgumentException {
+        for (Element element : roundEnv.getElementsAnnotatedWith(Subscribe.class)) {
+            BusAnnotationProcessor annotatedClass = getBusAnnotatedClass(element);
+            BindBusField field = new BindBusField(element);
             annotatedClass.addField(field);
         }
     }
 
-    private ExtraAnnotationProcessor getExtraAnnotatedClass(Element element) {
+    private BusAnnotationProcessor getBusAnnotatedClass(Element element) {
         TypeElement classElement = (TypeElement) element.getEnclosingElement();
         String fullClassName = classElement.getQualifiedName().toString();
-        ExtraAnnotationProcessor annotatedClass;
-        if (mExtraAnnotatedClassMap.containsKey(fullClassName)) {
-            annotatedClass = mExtraAnnotatedClassMap.get(fullClassName);
+        BusAnnotationProcessor annotatedClass;
+        if (mBusAnnotatedClassMap.containsKey(fullClassName)) {
+            annotatedClass = mBusAnnotatedClassMap.get(fullClassName);
         } else {
-            annotatedClass = new ExtraAnnotationProcessor(classElement, mElementUtils);
-            mExtraAnnotatedClassMap.put(fullClassName, annotatedClass);
+            annotatedClass = new BusAnnotationProcessor(classElement, mElementUtils);
+            mBusAnnotatedClassMap.put(fullClassName, annotatedClass);
         }
         return annotatedClass;
     }
+
+
 }

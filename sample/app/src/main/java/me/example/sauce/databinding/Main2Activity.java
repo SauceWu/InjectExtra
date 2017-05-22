@@ -32,7 +32,6 @@ public class Main2Activity extends AppCompatActivity {
         TextView textView = (TextView) findViewById(R.id.text);
 
         textView.setText(data + "----" + math);
-
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame,new FragmentTest()).commit();
     }
 }

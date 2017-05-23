@@ -10,8 +10,8 @@ def gitUrl = 'https://github.com/unknownSauce/sauceLib.git' // 修改为你的Gi
 group = "me.sauce"
 
 dependencies {
-    compile project(':injectExtra-annotation')
-    compile deps.supportv4
+    implementation project(':injectExtra-annotation')
+    implementation "com.android.support:support-v4:$supportLibraryVersion"
 }
 
 

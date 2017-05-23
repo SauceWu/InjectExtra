@@ -1,5 +1,9 @@
 package me.sauce.rxBus;
 
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -11,31 +15,30 @@ import java.util.Map;
  */
 
 public class RxManager {
-    private static final Map<Class<?>, Constructor> BINDINGS = new LinkedHashMap<>();
+    private static final Map<Class<?>, Class<?>> CLASS_MAP = new LinkedHashMap<>();
+
+    private static final Map<Class<?>, Constructor<? extends UnSubscribe>> BINDINGS = new LinkedHashMap<>();
     private static final Map<Class<?>, Method> UNBINDINGS = new LinkedHashMap<>();
 
-    public static void init(Object o) {
+    @NonNull
+    public static UnSubscribe init(Object o) {
+        UnSubscribe unSubscribe = UnSubscribe.EMPTY;
+
         try {
-            Constructor constructor = findBindingConstructorForClass(o.getClass());
-            if (constructor != null)
-                constructor.newInstance(o);
+            Constructor<? extends UnSubscribe> constructor = findBindingConstructorForClass(o.getClass());
+            if (constructor != null) {
+                unSubscribe = constructor.newInstance(o);
+            }
         } catch (NullPointerException | InstantiationException | IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
             e.printStackTrace();
         }
+        return unSubscribe;
     }
 
-    public void unBind(Object o) {
-        try {
-            Method constructor = findUnBindingForClass(o.getClass());
-            if (constructor != null)
-                constructor.invoke(null, new Object[0]);
-        } catch (NullPointerException | IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static Constructor findBindingConstructorForClass(Class<?> cls) {
-        Constructor bindingConstructor = BINDINGS.get(cls);
+    @Nullable
+    @CheckResult
+    private static Constructor<? extends UnSubscribe> findBindingConstructorForClass(Class<?> cls) {
+        Constructor<? extends UnSubscribe> bindingConstructor = BINDINGS.get(cls);
         if (bindingConstructor == null) {
             String clsName = cls.getName();
             if (clsName.startsWith("android.") || clsName.startsWith("java.")) {
@@ -43,8 +46,7 @@ public class RxManager {
             }
             try {
                 Class<?> bindingClass = Class.forName(clsName + "_BusManager");
-                //noinspection unchecked
-                bindingConstructor = bindingClass.getConstructor(cls);
+                    bindingConstructor = (Constructor<? extends UnSubscribe>) bindingClass.getConstructor(cls);
             } catch (ClassNotFoundException e) {
                 bindingConstructor = findBindingConstructorForClass(cls.getSuperclass());
             } catch (NoSuchMethodException e) {
@@ -55,26 +57,5 @@ public class RxManager {
         return bindingConstructor;
     }
 
-    private static Method findUnBindingForClass(Class<?> cls) {
-        Method unbindingMethod = UNBINDINGS.get(cls);
-        if (unbindingMethod == null) {
-            String clsName = cls.getName();
-            if (clsName.startsWith("android.") || clsName.startsWith("java.")) {
-                return null;
-            }
-            try {
-                Class<?> bindingClass = Class.forName(clsName + "_BusManager");
-                //noinspection unchecked
-                unbindingMethod = bindingClass.getDeclaredMethod("unBind", bindingClass);
 
-
-            } catch (ClassNotFoundException e) {
-                unbindingMethod = findUnBindingForClass(cls.getSuperclass());
-            } catch (NoSuchMethodException e) {
-                throw new RuntimeException("Unable to find binding constructor for " + clsName, e);
-            }
-            UNBINDINGS.put(cls, unbindingMethod);
-        }
-        return unbindingMethod;
-    }
 }

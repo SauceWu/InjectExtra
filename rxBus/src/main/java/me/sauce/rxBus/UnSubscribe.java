@@ -7,9 +7,11 @@ import android.support.annotation.UiThread;
  */
 
 public interface UnSubscribe {
-void unbind();
+    void unSubscribe();
 
     UnSubscribe EMPTY = new UnSubscribe() {
-        @Override public void unbind() { }
+        @Override
+        public void unSubscribe() {
+        }
     };
 }

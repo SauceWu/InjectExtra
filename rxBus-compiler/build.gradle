@@ -6,7 +6,7 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
     compile project(':rxBus-annotation')
-    compile 'com.google.auto.service:auto-service:1.0-rc2'
+    compile 'com.google.auto.service:auto-service:1.0-rc3'
     compile 'com.squareup:javapoet:1.8.0'
 }
 
@@ -15,3 +15,4 @@ tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

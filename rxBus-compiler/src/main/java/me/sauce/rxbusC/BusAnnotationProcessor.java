@@ -1,10 +1,14 @@
 package me.sauce.rxbusC;
 
+import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +29,7 @@ public class BusAnnotationProcessor {
     public TypeElement mClassElement;
     public List<BindBusField> mFields;
     public Elements mElementUtils;
-    public static final String RXBUS_TYPE = "me.sauce.rxBus.RxBus";
+    public static final ClassName RXBUS_TYPE = ClassName.get("me.sauce.rxBus","RxBus");
 
     public BusAnnotationProcessor(TypeElement classElement, Elements mElementUtils) {
         this.mClassElement = classElement;
@@ -40,29 +44,33 @@ public class BusAnnotationProcessor {
 
     public JavaFile generateFinder() {
         TypeMirror typeMirror = mClassElement.asType();
-
+        FieldSpec compositeDisposable = FieldSpec.builder(ClassName.get("io.reactivex.disposables", "CompositeDisposable"), "mCompositeDisposable", Modifier.PUBLIC).initializer("new CompositeDisposable()").build();
         MethodSpec.Builder injectMethodBuilder = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC)
                 .addParameter(TypeName.get(typeMirror), "target");
 
-        injectMethodBuilder.addStatement("$N rxBus =$N.getInstance();", RXBUS_TYPE, RXBUS_TYPE);
-
+        injectMethodBuilder.addStatement("$T rxBus =$T.getInstance()", RXBUS_TYPE, RXBUS_TYPE);
         for (BindBusField field : mFields) {
             // find views
             injectMethodBuilder.addCode("rxBus.toObservable($L)", field.getTag());
-            injectMethodBuilder.addCode(".observeOn($L)",field.getFieldThread());
+            injectMethodBuilder.addCode(".observeOn($L)", field.getFieldThread());
             if (field.getParameters().size() == 0)
                 injectMethodBuilder.addCode(".subscribe(o ->target.$N());", field.getFieldName());
             else
                 injectMethodBuilder.addCode(".subscribe(o ->target.$N($L));", field.getFieldName(), "o");
-
-
         }
-
+        MethodSpec.Builder unBind = MethodSpec.methodBuilder("unSubscribe")
+                .addModifiers(Modifier.PUBLIC)
+                .addAnnotation(ClassName.get(Override.class))
+                .addCode("if(!mCompositeDisposable.isDisposed())")
+                .addStatement("mCompositeDisposable.dispose()");
 
         TypeSpec finderClass = TypeSpec.classBuilder(mClassElement.getSimpleName() + "_BusManager")
                 .addModifiers(Modifier.PUBLIC)
                 .addMethod(injectMethodBuilder.build())
+                .addMethod(unBind.build())
+                .addField(compositeDisposable)
+                .addSuperinterface(ClassName.get("me.sauce.rxBus", "UnSubscribe"))
                 .build();
 
         String packageName = mElementUtils.getPackageOf(mClassElement).getQualifiedName().toString();

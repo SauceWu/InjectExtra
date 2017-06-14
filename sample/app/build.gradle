@@ -36,6 +36,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':injectExtra')
     compile project(':rxBus')
+
     annotationProcessor project(':injectExtra-compiler')
     annotationProcessor project(':rxBus-compiler')
 

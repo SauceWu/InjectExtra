@@ -83,7 +83,7 @@ public class RxBus {
      * @return
      */
 
-    public Observable<Object> toObservable(int code) {
+    public Observable<Object> toObservable(final int code) {
         return bus.ofType(Message.class)//判断接收事件类型
                 .filter(new Predicate<Message>() {
                     @Override
@@ -99,7 +99,7 @@ public class RxBus {
                 });
     }
 
-    public <T> Observable<T> toObservable(int code, final Class<T> eventType) {
+    public <T> Observable<T> toObservable(final int code, final Class<T> eventType) {
         return bus.ofType(Message.class)//判断接收事件类型
                 .filter(new Predicate<Message>() {
                     @Override

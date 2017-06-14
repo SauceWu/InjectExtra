@@ -30,7 +30,9 @@ public class BusAnnotationProcessor {
     public List<BindBusField> mFields;
     public Elements mElementUtils;
     public static final ClassName RXBUS_TYPE = ClassName.get("me.sauce.rxBus","RxBus");
+    public static final ClassName UNBIND_TYPE = ClassName.get("me.sauce.rxBus", "UnSubscribe");
 
+    public static final ClassName DISPOSABLES_TYPE=ClassName.get("io.reactivex.disposables", "CompositeDisposable");
     public BusAnnotationProcessor(TypeElement classElement, Elements mElementUtils) {
         this.mClassElement = classElement;
         this.mFields = new ArrayList<>();
@@ -44,7 +46,7 @@ public class BusAnnotationProcessor {
 
     public JavaFile generateFinder() {
         TypeMirror typeMirror = mClassElement.asType();
-        FieldSpec compositeDisposable = FieldSpec.builder(ClassName.get("io.reactivex.disposables", "CompositeDisposable"), "mCompositeDisposable", Modifier.PUBLIC).initializer("new CompositeDisposable()").build();
+        FieldSpec compositeDisposable = FieldSpec.builder(DISPOSABLES_TYPE, "mCompositeDisposable", Modifier.PUBLIC).initializer("new CompositeDisposable()").build();
         MethodSpec.Builder injectMethodBuilder = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC)
                 .addParameter(TypeName.get(typeMirror), "target");
@@ -70,7 +72,7 @@ public class BusAnnotationProcessor {
                 .addMethod(injectMethodBuilder.build())
                 .addMethod(unBind.build())
                 .addField(compositeDisposable)
-                .addSuperinterface(ClassName.get("me.sauce.rxBus", "UnSubscribe"))
+                .addSuperinterface(UNBIND_TYPE)
                 .build();
 
         String packageName = mElementUtils.getPackageOf(mClassElement).getQualifiedName().toString();

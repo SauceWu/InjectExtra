@@ -27,6 +27,8 @@ public class ExtraAnnotationProcessor {
     public List<BindExtraField> mFields;
     public Elements mElementUtils;
     private static final ClassName UI_THREAD = ClassName.get("android.support.annotation", "UiThread");
+    public static final ClassName INTENT_TYPE = ClassName.get("android.content", "Intent");
+    public static final ClassName BUNDLE_TYPE = ClassName.get("android.os", "Bundle");
 
     public ExtraAnnotationProcessor(TypeElement classElement, Elements mElementUtils) {
         this.mClassElement = classElement;
@@ -46,13 +48,19 @@ public class ExtraAnnotationProcessor {
                 .addAnnotation(UI_THREAD)
                 .addParameter(TypeName.get(typeMirror), "target");
 
+        if (isSubtypeOfType(typeMirror, "android.app.Activity"))
+            injectMethodBuilder.addStatement("$T intent = target.getIntent().getExtras()", BUNDLE_TYPE);
+        else
+            injectMethodBuilder.addStatement("$T intent = target.getArguments()", BUNDLE_TYPE);
+        injectMethodBuilder.addStatement("if(intent ==null) return");
 
         for (BindExtraField field : mFields) {
             // find views
-            if (isSubtypeOfType(typeMirror, "android.app.Activity"))
-                injectMethodBuilder.addStatement("Object $N = target.getIntent().getExtras().get($S)", field.getFieldName(), field.getKey());
-            else
-                injectMethodBuilder.addStatement("Object $N = target.getArguments().get($S)", field.getFieldName(), field.getKey());
+
+//            if (isSubtypeOfType(typeMirror, "android.app.Activity"))
+//                injectMethodBuilder.addStatement("Object $N = target.getIntent().getExtras().get($S)", field.getFieldName(), field.getKey());
+//            else
+            injectMethodBuilder.addStatement("Object $N = intent.get($S)", field.getFieldName(), field.getKey());
 
             injectMethodBuilder.addStatement("if($N!=null)\ntarget.$N = ($T)$N", field.getFieldName(), field.getFieldName(), ClassName.get(field.getFieldType()), field.getFieldName());
 

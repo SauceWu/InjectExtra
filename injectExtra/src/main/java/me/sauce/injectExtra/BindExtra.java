@@ -1,7 +1,7 @@
 package me.sauce.injectExtra;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 
 
 import java.lang.reflect.Constructor;
@@ -30,7 +30,7 @@ public class BindExtra {
         }
     }
 
-    public static void inject(Fragment fragment) {
+    public static void inject(android.app.Fragment fragment) {
         try {
             Constructor constructor = findBindingConstructorForClass(fragment.getClass());
             if (constructor != null)
@@ -39,7 +39,7 @@ public class BindExtra {
             e.printStackTrace();
         }
     }
-    public static void inject(android.support.v4.app.Fragment fragment) {
+    public static void inject(Fragment fragment) {
         try {
             Constructor constructor = findBindingConstructorForClass(fragment.getClass());
             if (constructor != null)

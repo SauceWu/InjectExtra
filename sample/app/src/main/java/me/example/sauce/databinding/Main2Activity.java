@@ -33,5 +33,8 @@ public class Main2Activity extends AppCompatActivity {
 
         textView.setText(data + "----" + math);
         getSupportFragmentManager().beginTransaction().replace(R.id.frame,new FragmentTest()).commit();
+
+
+
     }
 }

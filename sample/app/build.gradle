@@ -11,9 +11,6 @@ android {
         versionCode Integer.parseInt(rootProject.ext.VERSION_CODE)
         versionName rootProject.ext.VERSION_NAME
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-
     }
     compileOptions {
         sourceCompatibility rootProject.ext.sourceCompatibilityVersion
@@ -49,7 +46,6 @@ dependencies {
     compile deps.supportDesign
     compile deps.supportConstraint
 
-    testCompile deps.junit
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
 repositories {

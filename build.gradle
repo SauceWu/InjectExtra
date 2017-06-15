@@ -33,7 +33,7 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 ext {
-    VERSION_NAME = '1.0.22'
+    VERSION_NAME = '2.0.0'
     VERSION_CODE = '34'
 
     buildToolsVersion = '25.0.3'

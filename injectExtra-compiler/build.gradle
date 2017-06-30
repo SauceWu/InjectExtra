@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'kotlin'
 
 version = VERSION_NAME // 修改为你的版本号
 
@@ -13,6 +14,8 @@ dependencies {
     compile project(':injectExtra-annotation')
     compile 'com.google.auto.service:auto-service:1.0-rc3'
     compile 'com.squareup:javapoet:1.8.0'
+    implementation 'com.squareup:kotlinpoet:0.3.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
 
 

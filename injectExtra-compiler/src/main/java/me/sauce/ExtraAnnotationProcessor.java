@@ -43,27 +43,32 @@ public class ExtraAnnotationProcessor {
 
     public JavaFile generateFinder() {
         TypeMirror typeMirror = mClassElement.asType();
+
         MethodSpec.Builder injectMethodBuilder = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(UI_THREAD)
                 .addParameter(TypeName.get(typeMirror), "target");
 
-        if (isSubtypeOfType(typeMirror, "android.app.Activity"))
-            injectMethodBuilder.addStatement("$T intent = target.getIntent().getExtras()", BUNDLE_TYPE);
-        else
-            injectMethodBuilder.addStatement("$T intent = target.getArguments()", BUNDLE_TYPE);
-        injectMethodBuilder.addStatement("if(intent ==null) return");
+        if (isSubtypeOfType(typeMirror, "android.app.Activity")) {
+            injectMethodBuilder.addStatement("$T intent = target.getIntent()", INTENT_TYPE);
+            injectMethodBuilder.addStatement("if(intent ==null) return");
+            injectMethodBuilder.addStatement("$T bundle = intent.getExtras()", BUNDLE_TYPE);
+
+
+        } else
+            injectMethodBuilder.addStatement("$T bundle = target.getArguments()", BUNDLE_TYPE);
+        injectMethodBuilder.addStatement("if(bundle ==null) return");
 
         for (BindExtraField field : mFields) {
-            // find views
+            if (field.getFieldName().toString().equals("intent")) {
+                injectMethodBuilder.addStatement("target.$N =intent", field.getFieldName());
 
-//            if (isSubtypeOfType(typeMirror, "android.app.Activity"))
-//                injectMethodBuilder.addStatement("Object $N = target.getIntent().getExtras().get($S)", field.getFieldName(), field.getKey());
-//            else
-            injectMethodBuilder.addStatement("Object $N = intent.get($S)", field.getFieldName(), field.getKey());
+            } else {
 
-            injectMethodBuilder.addStatement("if($N!=null)\ntarget.$N = ($T)$N", field.getFieldName(), field.getFieldName(), ClassName.get(field.getFieldType()), field.getFieldName());
+                injectMethodBuilder.addStatement("Object $N = bundle.get($S)", field.getFieldName(), field.getKey());
 
+                injectMethodBuilder.addStatement("if($N!=null)\ntarget.$N = ($T)$N", field.getFieldName(), field.getFieldName(), ClassName.get(field.getFieldType()), field.getFieldName());
+            }
         }
 
 

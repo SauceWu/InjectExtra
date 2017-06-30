@@ -1,10 +1,14 @@
 package me.sauce;
 
 import com.google.auto.service.AutoService;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.kotlinpoet.KotlinFile;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,6 +25,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
+import javax.tools.JavaFileObject;
 
 
 @AutoService(Processor.class)//自动生成 javax.annotation.processing.IProcessor 文件
@@ -53,9 +58,10 @@ public class AnnotationProcessor extends AbstractProcessor {
         mElementUtils = processingEnv.getElementUtils();
         mFiler = processingEnv.getFiler();
         mMessager = processingEnv.getMessager();
+        mMessager.printMessage(Diagnostic.Kind.NOTE, "java");
     }
 
-    private Map<String, ExtraAnnotationProcessor> mExtraAnnotatedClassMap = new HashMap<>();
+    private Map<String, ExtraAPKT> mExtraAnnotatedClassMap = new HashMap<>();
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -66,9 +72,9 @@ public class AnnotationProcessor extends AbstractProcessor {
             return true; // stop process
         }
 
-        for (ExtraAnnotationProcessor annotatedClass : mExtraAnnotatedClassMap.values()) {
+        for (ExtraAPKT annotatedClass : mExtraAnnotatedClassMap.values()) {
             try {
-                annotatedClass.generateFinder().writeTo(mFiler);
+                annotatedClass.generateFinder(mFiler);
             } catch (IOException e) {
                 processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Unable to write binding for type %s: %s" + e.getMessage());
             }
@@ -79,22 +85,25 @@ public class AnnotationProcessor extends AbstractProcessor {
 
     private void processBindExtra(RoundEnvironment roundEnv) throws IllegalArgumentException {
         for (Element element : roundEnv.getElementsAnnotatedWith(InjectExtra.class)) {
-            ExtraAnnotationProcessor annotatedClass = getExtraAnnotatedClass(element);
+            ExtraAPKT annotatedClass = getExtraAnnotatedClass(element);
             BindExtraField field = new BindExtraField(element);
             annotatedClass.addField(field);
         }
     }
 
-    private ExtraAnnotationProcessor getExtraAnnotatedClass(Element element) {
+    private ExtraAPKT getExtraAnnotatedClass(Element element) {
         TypeElement classElement = (TypeElement) element.getEnclosingElement();
         String fullClassName = classElement.getQualifiedName().toString();
-        ExtraAnnotationProcessor annotatedClass;
+        mMessager.printMessage(Diagnostic.Kind.NOTE, fullClassName);
+        ExtraAPKT annotatedClass;
         if (mExtraAnnotatedClassMap.containsKey(fullClassName)) {
             annotatedClass = mExtraAnnotatedClassMap.get(fullClassName);
         } else {
-            annotatedClass = new ExtraAnnotationProcessor(classElement, mElementUtils);
+            annotatedClass = new ExtraAPKT(classElement, mElementUtils);
             mExtraAnnotatedClassMap.put(fullClassName, annotatedClass);
         }
         return annotatedClass;
     }
+
+
 }

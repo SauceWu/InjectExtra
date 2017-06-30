@@ -1,2 +1,1 @@
-rootProject.name = 'sauceLib'
-include ':sample:app', ':widgetLibrary', ':injectExtra-annotation', ':injectExtra-compiler', ':injectExtra', ':rxBus', ':rxBus-annotation', ':rxBus-compiler'
+include ':sample:app',  ':injectExtra-annotation', ':injectExtra-compiler', ':injectExtra', ':injectExtra-kotlin-compiler'

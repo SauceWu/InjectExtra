@@ -32,10 +32,9 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':injectExtra')
-    compile project(':rxBus')
 
     annotationProcessor project(':injectExtra-compiler')
-    annotationProcessor project(':rxBus-compiler')
+    kapt project(':injectExtra-compiler')
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

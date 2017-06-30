@@ -4,6 +4,7 @@ apply plugin: 'com.jfrog.bintray'
 def siteUrl = 'https://github.com/unknownSauce/sauceLib' // 修改为你的项目的主页
 def gitUrl = 'https://github.com/unknownSauce/sauceLib.git' // 修改为你的Git仓库的url
 version = VERSION_NAME
+group = "me.sauce"  //与module命名一致
 //  解决build警告：编码GBK的不可映射字符
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
@@ -11,7 +12,7 @@ tasks.withType(JavaCompile) {
 
 install {
     if (project.getPlugins().hasPlugin('com.android.application') || project.getPlugins().hasPlugin('com.android.library')) {
-        println '--------install android' + POM_NAME + "-----------"
+        println '--------install android' + POM_NAME + "-----------"+GROUP+"--"+POM_PACKAGING+"--"
         repositories.mavenInstaller {
             configuration = configurations.archives
 

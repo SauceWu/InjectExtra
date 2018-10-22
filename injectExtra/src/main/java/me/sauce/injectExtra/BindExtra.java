@@ -11,7 +11,7 @@ import java.util.Map;
 
 
 /**
- * Created by sauce on 2017/3/8.
+ * @author sauce on 2017/3/8.
  * Version 1.0.0
  */
 public class BindExtra {
@@ -23,31 +23,26 @@ public class BindExtra {
 
         try {
             Constructor constructor = findBindingConstructorForClass(activity.getClass());
-            if (constructor != null)
+            if (constructor != null) {
                 constructor.newInstance(activity);
+            }
         } catch (NullPointerException | InstantiationException | IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
             e.printStackTrace();
         }
     }
 
-    public static void inject(Fragment fragment) {
+
+    public static void inject(androidx.fragment.app.Fragment fragment) {
         try {
             Constructor constructor = findBindingConstructorForClass(fragment.getClass());
-            if (constructor != null)
+            if (constructor != null) {
                 constructor.newInstance(fragment);
+            }
         } catch (NullPointerException | InstantiationException | IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
             e.printStackTrace();
         }
     }
-    public static void inject(android.support.v4.app.Fragment fragment) {
-        try {
-            Constructor constructor = findBindingConstructorForClass(fragment.getClass());
-            if (constructor != null)
-                constructor.newInstance(fragment);
-        } catch (NullPointerException | InstantiationException | IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-    }
+
     private static Constructor findBindingConstructorForClass(Class<?> cls) {
         Constructor bindingConstructor = BINDINGS.get(cls);
         if (bindingConstructor == null) {

@@ -35,7 +35,7 @@ public class AnnotationProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        Set<String> annotataions = new LinkedHashSet<String>();
+        Set<String> annotataions = new LinkedHashSet<>();
         annotataions.add(InjectExtra.class.getCanonicalName());
         return annotataions;
     }
@@ -64,7 +64,8 @@ public class AnnotationProcessor extends AbstractProcessor {
         try {
             processBindExtra(roundEnv);
         } catch (IllegalArgumentException e) {
-            return true; // stop process
+            // stop process
+            return true;
         }
 
         for (ExtraAnnotationProcessor annotatedClass : mAnnotatedClassMap.values()) {

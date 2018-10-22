@@ -27,7 +27,7 @@ public class ExtraAnnotationProcessor {
     public List<BindExtraField> mFields;
     public Elements mElementUtils;
     private static final ClassName UI_THREAD =
-            ClassName.get("android.support.annotation", "UiThread");
+            ClassName.get("androidx.annotation", "UiThread");
 
     public ExtraAnnotationProcessor(TypeElement classElement, Elements mElementUtils) {
         this.mClassElement = classElement;
@@ -50,10 +50,11 @@ public class ExtraAnnotationProcessor {
 
         for (BindExtraField field : mFields) {
             // find views
-            if (isSubtypeOfType(typeMirror, "android.app.Activity"))
+            if (isSubtypeOfType(typeMirror, "android.app.Activity")) {
                 injectMethodBuilder.addStatement("Object $N = target.getIntent().getExtras().get($S)", field.getFieldName(), field.getKey());
-            else
+            } else {
                 injectMethodBuilder.addStatement("Object $N = target.getArguments().get($S)", field.getFieldName(), field.getKey());
+            }
 
             injectMethodBuilder.addStatement("if($N!=null)\ntarget.$N = ($T)$N", field.getFieldName(), field.getFieldName(), ClassName.get(field.getFieldType()), field.getFieldName());
 

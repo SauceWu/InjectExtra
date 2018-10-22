@@ -1,12 +1,17 @@
 package me.example.sauce.databinding;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.sauce.databinding.R;
+
+import androidx.fragment.app.Fragment;
 import me.sauce.InjectExtra;
 import me.sauce.injectExtra.BindExtra;
 
@@ -18,11 +23,19 @@ public class FragmentTest extends Fragment {
     @InjectExtra("data")
     String data;
 
+    public static FragmentTest newInstance() {
+
+        Bundle args = new Bundle();
+
+        FragmentTest fragment = new FragmentTest();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.frag_test, container);
     }
 
     @Override
